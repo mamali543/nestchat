@@ -6,9 +6,20 @@ const app = new Vue({
      title: 'Nestjs Chat',
      name: '',
      text: '',
-     messages: [],
+     room: '',
+     messages: {
+         general: [],
+         typescript: [],
+         nestjs: []
+     },
+     rooms: {
+        general: false,
+        typescript: false,
+        nestjs: false
+     },
      alerts: [],
-     socket: { chat: null, alerts: null}
+     socket: { chat: null, alerts: null},
+     activeRoom: 'general'
     },
     methods: {
 /*the sendMesage() function which gets the input from our layout 
@@ -34,6 +45,14 @@ and emits it to our server using the same event if the input is correct.*/
     validateInput() {
      return this.name.length > 0 && this.text.length > 0
     }
+   },
+   computed: {
+       //anywhere in our template wwe can acces this just like it's a property
+       //basicaly a computed getter 
+       isMemberOfActiveRoom()
+       {
+           return this.rooms[this.activeRoom];
+       }
    },
 //the created() function will be executed whenever the frontend is created
     created() {

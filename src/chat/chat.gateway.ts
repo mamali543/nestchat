@@ -27,9 +27,20 @@ import {
   @SubscribeMessage('chatToServer')
   handleMessage(client: Socket, payload: string): void {
 //We make use of the instance in our handleMessage() function where we send data to all clients connected to the server using the emit() function
-   this.server.emit('chatToClient', payload);
+   this.server.to(payload.room).emit('chatToClient', payload);
   }
  
+  @SubscribeMessage('chatToServer')
+  handleJoinRoom(client: Socket, room: string): void {
+   client.join(room);
+   client.emit('joinedRoom', room );
+  }
+
+  @SubscribeMessage('chatToServer')
+  handleLeftRoom(client: Socket, room: string): void {
+   client.leave(room);
+   client.emit('LeftRoom', room );
+  }
   afterInit(server: Server) {
    this.logger.log('Init');
   }

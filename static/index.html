@@ -27,7 +27,7 @@
                                 <div class="card">
                                     <div id="messages" class="card-block">
                                         <ul>
-                                            <li v-for="message of messages"> <strong>{{ message.name }}:</strong> {{ message.text }}</li>
+                                            <li v-for="message of messages[activeRoom]"> <strong>{{ message.name }}:</strong> {{ message.text }}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -35,6 +35,14 @@
                                 <textarea id="textarea" class="form-control" v-model="text" placeholder="Enter message..."></textarea>
                                 <br>
                                 <button id="send" class="btn" @click.prevent="sendChatMessage">Send</button>
+                            </div>
+                            <div class="tab-row">
+                                <button class="tab-btn" :class="{active: activeRoom == 'general'}" @click="activeRoom = 'general'">General</button>
+                                <button class="tab-btn" :class="{active: activeRoom == 'typescript'}" @click="activeRoom = 'typescript'">TypeScript</button>
+                                <button class="tab-btn" :class="{active: activeRoom == 'nestjs'}" @click="activeRoom = 'nestjs'">NestJs</button>
+                            </div>
+                            <div class="tab-row">
+                                Status: {{isMemberOfActiveRoom ? 'joined' : 'NOT Joined'}} <button @click="toggleRoomMembership()">{{isMemberOfActiveRoom ? 'Leave' : 'Join'}}</button>
                             </div>
                         </div>
                     </div>

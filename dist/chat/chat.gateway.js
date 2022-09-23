@@ -18,7 +18,15 @@ let ChatGateway = class ChatGateway {
         this.logger = new common_1.Logger('ChatGateway');
     }
     handleMessage(client, payload) {
-        this.server.emit('chatToClient', payload);
+        this.server.to(payload.room).emit('chatToClient', payload);
+    }
+    handleJoinRoom(client, room) {
+        client.join(room);
+        client.emit('joinedRoom', room);
+    }
+    handleLeftRoom(client, room) {
+        client.leave(room);
+        client.emit('LeftRoom', room);
     }
     afterInit(server) {
         this.logger.log('Init');
@@ -40,6 +48,18 @@ __decorate([
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('chatToServer'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:returntype", void 0)
+], ChatGateway.prototype, "handleJoinRoom", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('chatToServer'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:returntype", void 0)
+], ChatGateway.prototype, "handleLeftRoom", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
