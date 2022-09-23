@@ -9,6 +9,11 @@ import {
  import { Logger } from '@nestjs/common';
  import { Socket, Server } from 'socket.io';
  
+ interface Person {
+  name: string,
+  text: string,
+  room: string,
+ }
  @WebSocketGateway({
    cors: {
      origin: '*',
@@ -25,9 +30,9 @@ import {
   private logger: Logger = new Logger('ChatGateway');
 //The handleMessage() function is also decorated with @SubscribeMessage() which makes it listen to an event named msgToServer.
   @SubscribeMessage('chatToServer')
-  handleMessage(client: Socket, payload: string): void {
-//We make use of the instance in our handleMessage() function where we send data to all clients connected to the server using the emit() function
-   this.server.to(payload.room).emit('chatToClient', payload);
+  handleMessage(client: Socket, payload: Person): void {
+//We make use of the instance in our handleMessage() function where we send data to all clients connected to the server using the emit() function   
+this.server.to(payload.room).emit('chatToClient', payload);
   }
  
   @SubscribeMessage('joinRoom')
@@ -39,7 +44,7 @@ import {
   @SubscribeMessage('leaveRoom')
   handleLeftRoom(client: Socket, room: string): void {
    client.leave(room);
-   client.emit('LeftRoom', room );
+   client.emit('leftRoom', room );
   }
   afterInit(server: Server) {
    this.logger.log('Init');

@@ -6,7 +6,6 @@ const app = new Vue({
      title: 'Nestjs Chat',
      name: '',
      text: '',
-     room: '',
      messages: {
          general: [],
          typescript: [],
@@ -25,33 +24,36 @@ const app = new Vue({
 /*the sendMesage() function which gets the input from our layout 
 and emits it to our server using the same event if the input is correct.*/
      sendChatMessage() {
-      if(this.validateInput()) {
-        if (this.isMemberOfActiveRoom())
+        if (this.isMemberOfActiveRoom)
         {
             const message = {
-                name: this.name,
-                text: this.text,
-                room: this.activeRoom
-            }
-            this.socket.chat.emit('chatToServer', message)
-            // this.text = ''
-            // this.name = ''
-            // this.activeRoom = ''
+            name: this.name,
+            text: this.text,
+            room: this.activeRoom
+           }
+           this.socket.chat.emit('chatToServer', message);
+           this.text = '';
+           this.activeRoom[this.activeRoom] = true;
         }
         else
-            alert('You must be a member of the active room to send messages!');
-     }
+            alert('You Must be an active member in this chanel to send a message !');
     },
     receivedAlertMessage(alert) {
         this.alerts.push(alert);
 
     },
     receivedChatMessage(message) {
-        this.messages.push(message);
+        this.messages[message.room].push(message);
     },
     validateInput() {
      return this.name.length > 0 && this.text.length > 0
-    }
+    },
+    toggleRoomMembership() {
+        if (this.isMemberOfActiveRoom)
+            this.socket.chat.emit('leaveRoom', this.activeRoom);
+        else
+            this.socket.chat.emit('joinRoom', this.activeRoom);
+    },
    },
    computed: {
        //anywhere in our template wwe can acces this just like it's a property
@@ -70,7 +72,17 @@ library we will later import in our frontend*/
  for the msgToClient event we created earlier in our server.*/
      this.socket.chat.on('chatToClient', (message) => {
       this.receivedChatMessage(message)
-     })
+     });
+    this.socket.chat.on('connect', () => {
+        this.toggleRoomMembership();
+    });
+    this.socket.chat.on('joinedRoom', (room) => {
+        this.rooms[room] = true;
+    });
+    this.socket.chat.on('leftRoom', (room) => {
+        console.log('here left room');
+        this.rooms[room] = false;
+    });
 
      this.socket.alerts = io('http://localhost:3000/alert')
      this.socket.alerts.on('alertToClient', (alert) => {

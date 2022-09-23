@@ -26,7 +26,7 @@ let ChatGateway = class ChatGateway {
     }
     handleLeftRoom(client, room) {
         client.leave(room);
-        client.emit('LeftRoom', room);
+        client.emit('leftRoom', room);
     }
     afterInit(server) {
         this.logger.log('Init');
@@ -45,17 +45,17 @@ __decorate([
 __decorate([
     (0, websockets_1.SubscribeMessage)('chatToServer'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleMessage", null);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('chatToServer'),
+    (0, websockets_1.SubscribeMessage)('joinRoom'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleJoinRoom", null);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('chatToServer'),
+    (0, websockets_1.SubscribeMessage)('leaveRoom'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", void 0)

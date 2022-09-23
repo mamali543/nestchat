@@ -16,6 +16,15 @@ section.alerts {
     overflow-y: scroll;
    }
    
-   #app {
-    margin-top: 2rem;
-   }
+#app {
+margin-top: 2rem;
+}
+
+.tab-row {
+    padding-top: 20px;
+}
+
+.tab-btn.active{
+    background: blue;
+    color: white;
+}
