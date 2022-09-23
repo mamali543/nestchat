@@ -26,13 +26,20 @@ const app = new Vue({
 and emits it to our server using the same event if the input is correct.*/
      sendChatMessage() {
       if(this.validateInput()) {
-       const message = {
-       name: this.name,
-       text: this.text
-      }
-      this.socket.chat.emit('chatToServer', message)
-      this.text = ''
-      this.name = ''
+        if (this.isMemberOfActiveRoom())
+        {
+            const message = {
+                name: this.name,
+                text: this.text,
+                room: this.activeRoom
+            }
+            this.socket.chat.emit('chatToServer', message)
+            // this.text = ''
+            // this.name = ''
+            // this.activeRoom = ''
+        }
+        else
+            alert('You must be a member of the active room to send messages!');
      }
     },
     receivedAlertMessage(alert) {

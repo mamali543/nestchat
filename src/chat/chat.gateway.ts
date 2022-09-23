@@ -30,13 +30,13 @@ import {
    this.server.to(payload.room).emit('chatToClient', payload);
   }
  
-  @SubscribeMessage('chatToServer')
+  @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, room: string): void {
    client.join(room);
    client.emit('joinedRoom', room );
   }
 
-  @SubscribeMessage('chatToServer')
+  @SubscribeMessage('leaveRoom')
   handleLeftRoom(client: Socket, room: string): void {
    client.leave(room);
    client.emit('LeftRoom', room );
