@@ -14,11 +14,11 @@ import {
   text: string,
   room: string,
  }
- @WebSocketGateway({
+ @WebSocketGateway(3001, {
    cors: {
      origin: '*',
    },
-   namespace: '/chat',
+   namespace: 'chat'
  })   // @WebSocketGateway decorator gives us access to the socket.io functionality.
 
  /*We also implement three interfaces OnGatewayInit, OnGatewayConnection 
@@ -27,16 +27,18 @@ import {
  
    // we created a member variable called server which is decorated with @WebsocketServer() which gives us access to the websockets server instance.
   @WebSocketServer() server: Server; 
+
   private logger: Logger = new Logger('ChatGateway');
 //The handleMessage() function is also decorated with @SubscribeMessage() which makes it listen to an event named msgToServer.
   @SubscribeMessage('chatToServer')
   handleMessage(client: Socket, payload: Person): void {
-//We make use of the instance in our handleMessage() function where we send data to all clients connected to the server using the emit() function   
-this.server.to(payload.room).emit('chatToClient', payload);
+    //We make use of the instance in our handleMessage() function where we send data to all clients connected to the server using the emit() function   
+    this.server.to(payload.room).emit('chatToClient', payload);
   }
  
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, room: string): void {
+
    client.join(room);
    client.emit('joinedRoom', room );
   }
@@ -46,6 +48,7 @@ this.server.to(payload.room).emit('chatToClient', payload);
    client.leave(room);
    client.emit('leftRoom', room );
   }
+
   afterInit(server: Server) {
    this.logger.log('Init');
   }

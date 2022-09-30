@@ -67,7 +67,7 @@ and emits it to our server using the same event if the input is correct.*/
     created() {
 /*in this method, we instantiate our socket variable using the socketio 
 library we will later import in our frontend*/
-     this.socket.chat = io('http://localhost:3000/chat')
+     this.socket.chat = io('http://localhost:3001/chat')
 /*We also add an event listener on our socket which listens
  for the msgToClient event we created earlier in our server.*/
      this.socket.chat.on('chatToClient', (message) => {
@@ -86,7 +86,7 @@ library we will later import in our frontend*/
 
      this.socket.alerts = io('http://localhost:3000/alert')
      this.socket.alerts.on('alertToClient', (alert) => {
-        this.receivedAlertMessage(alert)
+        this.receivedAlertMessage(alert);
        })
     }
    })

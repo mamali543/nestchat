@@ -61,11 +61,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleLeftRoom", null);
 ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({
+    (0, websockets_1.WebSocketGateway)(3001, {
         cors: {
             origin: '*',
         },
-        namespace: '/chat',
+        namespace: 'chat'
     })
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;
